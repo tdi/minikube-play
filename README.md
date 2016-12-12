@@ -4,15 +4,15 @@ This is a playground to play with kubernetes (k8s) in its one-node local cluster
 
 # Install 
 
-To install minikube for your OS, use our provision.sh script. 
+To install minikube for your OS, use the `provision.sh` script from this repo. Or install manually:
 
-Install the minikube:
+Install the minikube (for linux):
 
 ```bash 
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.13.1/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
 ```
-Install kubectl:
+Install kubectl (for linux):
 
 ```bash
 curl -Lo kubectl http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
@@ -42,19 +42,69 @@ Let's run a deployment using Docker image `darek/goweb:1.0` and exposes port 808
 ```bash
 ➜ kubectl run goweb --image=darek/goweb:1.0 --port=8080
 ```
+Remember that kuberneter needs to pull the image, so the container may not beed provisioned right away.
 Let's see pods and deployments:
 
 ```bash
 ➜ kubectl get pods
-NAME                    READY     STATUS    RESTARTS   AGE
-goweb-907329357-dnycx   1/1       Running   0          2m
+NAME                    READY     STATUS              RESTARTS   AGE
+goweb-907329357-dnycx   0/1       ContainerCreating   0          2m
+```
 
+`ContainerCreating` means that the container is in progress. Use a `describe` command to see detailed information. 
+
+```bash
+➜ kubectl describe pod goweb-907329357-jiau5
+Name:		goweb-907329357-jiau5
+Namespace:	default
+Node:		minikube/192.168.99.100
+Start Time:	Mon, 12 Dec 2016 07:26:08 +0100
+Labels:		pod-template-hash=907329357
+		    run=goweb
+Status:		Pending
+IP:
+Controllers:	ReplicaSet/goweb-907329357
+Containers:
+  goweb:
+    Container ID:
+    Image:			darek/goweb:1.0
+    Image ID:
+    Port:			8080/TCP
+    State:			Waiting
+      Reason:			ContainerCreating
+    Ready:			False
+    Restart Count:		0
+    Environment Variables:	<none>
+Conditions:
+  Type		Status
+  Initialized 	True
+  Ready 	False
+  PodScheduled 	True
+Volumes:
+  default-token-f3ech:
+    Type:	Secret (a volume populated by a Secret)
+    SecretName:	default-token-f3ech
+QoS Tier:	BestEffort
+Events:
+  FirstSeen	LastSeen	Count	From			SubobjectPath		Type		Reason		Message
+  ---------	--------	-----	----			-------------		--------	------		-------
+  2m		2m		1	{default-scheduler }				Normal		Scheduled	Successfully assigned goweb-907329357-jiau5 to minikube
+  2m		2m		1	{kubelet minikube}	spec.containers{goweb}	Normal		Pulling		pulling image "darek/goweb:1.0"
+```
+You can that the pod is pulling the image, Events section is very helpful. After some time the pod, and the deployment should be ready. 
+
+```bash 
 ➜ kubectl get deployments
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 goweb     1         1         1            1           3m
 ```
 
 Remember that in order to get a detailed insight into pods and deployments with a `describe command`. You can also see logs from a pod with a `kubectl logs PODNAME` command.
+
+```bash
+➜ kubectl logs goweb-907329357-jiau5
+2016/12/12 06:33:26 Starting goweb 1.0
+```
 
 Let's define a service, which will group our pods, expose a port and provide discoverability. Type `NodePort` says that the port will be exposed.
 
@@ -66,7 +116,7 @@ goweb        10.0.0.191   <nodes>       8080/TCP   9s
 kubernetes   10.0.0.1     <none>        443/TCP    76d
 ```
 
-In order to access the service to its exposed port, you can use minikube's helped command: ` minikube service goweb`. It will open your browser right to the address:port of the service. If you have a httpie tool installed, you use this oneliner:
+In order to access the service to its exposed port, you can use minikube's helped command: ` minikube service goweb`. It will open your browser right to the address:port of the service. If you have the httpie tool installed (`pip install httpie`), you use this oneliner:
 
 ```bash
 http $(minikube service  goweb --url)
