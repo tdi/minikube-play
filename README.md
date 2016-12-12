@@ -4,19 +4,7 @@ This is a playground to play with kubernetes (k8s) in its one-node local cluster
 
 # Install 
 
-To install minikube for your OS, use the `provision.sh` script from this repo. Or install manually:
-
-Install the minikube (for linux):
-
-```bash 
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.13.1/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-
-```
-Install kubectl (for linux):
-
-```bash
-curl -Lo kubectl http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-```
+To install minikube for your OS, use the `provision.sh` script from this repo. It will detect if you have Linux or OSX.
 
 Start minikube by executing: `minikube start`. Some very helpful minikube commands are:
 
