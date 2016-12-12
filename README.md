@@ -4,7 +4,7 @@ This is a playground to play with kubernetes (k8s) in its one-node local cluster
 
 # Install 
 
-To install minikube for your OS, use the `provision.sh` script from this repo. It will detect if you have Linux or OSX.
+To install minikube for your OS, use the `provision.sh` script from this repo. It will detect if you have Linux or OSX. The script will install `kubectl` and `minikube`. 
 
 Start minikube by executing: `minikube start`. Some very helpful minikube commands are:
 
