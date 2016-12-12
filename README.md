@@ -1,8 +1,10 @@
 # Minikube playground 
 
-This is a playground to play with kubernetes (k8s) in its one-node local cluster modem with a help from minikube. Minikube will run a virtualized, ready to play k8s cluster. 
+This is a playground to play with kubernetes (k8s) in its one-node local cluster mode with the help of [minikube](https://github.com/kubernetes/minikube). Minikube will run a virtualized, ready to play k8s cluster.
 
 # Install 
+
+To install minikube for your OS, use our provision.sh script. 
 
 Install the minikube:
 
@@ -28,7 +30,7 @@ Start minikube by executing: `minikube start`. Some very helpful minikube comman
 We can manage the k8s cluster with kubectl command. Let's see nodes of our cluster.
 
 ```bash
-➜  kuberctl get nodes
+➜  kubectl get nodes
 NAME       STATUS    AGE
 minikube   Ready     76d
 ```
