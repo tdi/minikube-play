@@ -30,20 +30,58 @@ Let's run a deployment using Docker image `darek/goweb:1.0` and exposes port 808
 ```bash
 ➜ kubectl run goweb --image=darek/goweb:1.0 --port=8080
 ```
+You can add labels to pods, for a faster search and discoverability. Let's add labels to all pods we have (for now we have only one). Labels are great to select pods you want if you have many of them.
+
+```bash
+➜ kubectl label pods --all app=goweb
+➜ kubectl label pods --all environement=production
+➜ kubectl label pods --all release=stable
+```
+
+The same effect can be achieved by using a YAML file: `kubectl create -f goweb_deployment.yml`. 
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: goweb
+        release: stable
+        environment: production
+    spec:
+      containers:
+      - name: goweb
+        image: darek/goweb:1.0
+        ports:
+        - containerPort: 8080
+```
+
 Remember that kuberneter needs to pull the image, so the container may not beed provisioned right away.
-Let's see pods and deployments:
+Let's see pods:
 
 ```bash
 ➜ kubectl get pods
 NAME                    READY     STATUS              RESTARTS   AGE
 goweb-907329357-dnycx   0/1       ContainerCreating   0          2m
 ```
+And now by labels:
 
-`ContainerCreating` means that the container is in progress. Use a `describe` command to see detailed information. 
+```
+➜ kubectl get pods -l app=goweb --show-labels
+NAME                     READY     STATUS              RESTARTS   AGE       LABELS
+goweb-907329357-dnycx    0/1       ContainerCreating   0          13m       app=goweb,pod-template-hash=2461254821,stage=testing,what=test
+```
+
+`ContainerCreating` says that the container is in progress. Use a `describe` command to see detailed information. 
 
 ```bash
-➜ kubectl describe pod goweb-907329357-jiau5
-Name:		goweb-907329357-jiau5
+➜ kubectl describe pod goweb-907329357-dnycx 
+Name:		goweb-907329357-dnycx 
 Namespace:	default
 Node:		minikube/192.168.99.100
 Start Time:	Mon, 12 Dec 2016 07:26:08 +0100
@@ -90,9 +128,10 @@ goweb     1         1         1            1           3m
 Remember that in order to get a detailed insight into pods and deployments with a `describe command`. You can also see logs from a pod with a `kubectl logs PODNAME` command.
 
 ```bash
-➜ kubectl logs goweb-907329357-jiau5
+➜ kubectl logs goweb-907329357-dnycx 
 2016/12/12 06:33:26 Starting goweb 1.0
 ```
+
 
 Let's define a service, which will group our pods, expose a port and provide discoverability. Type `NodePort` says that the port will be exposed.
 
