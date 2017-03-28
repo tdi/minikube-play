@@ -13,7 +13,7 @@ Start minikube by executing: `minikube start`. Some very helpful minikube comman
 - `logs` - show logs,
 - `service` - show URL for a service running in the k8s cluster; we will use this command later.
 
-#Play 
+# Play 
 
 We can manage the k8s cluster with kubectl command. Let's see nodes of our cluster.
 
