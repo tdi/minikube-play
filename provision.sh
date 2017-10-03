@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-MINIKUBE_VERSION="0.13.1"
-KUBECTL_VERSION="1.3.0"
+MINIKUBE_VERSION="0.22.2"
+KUBECTL_VERSION="1.8.0"
 
 case $OSTYPE in 
   darwin*)
