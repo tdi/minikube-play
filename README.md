@@ -23,7 +23,7 @@ NAME       STATUS    AGE
 minikube   Ready     76d
 ```
 
-A very detailed information for a given node can be achived via `kubectl describe node minikube`. You can also start a fancy Web dashboard ! `kubectl dashboard` will automatically open in your default Web browser, to get only the URL, add `--url`.
+A very detailed information for a given node can be achived via `kubectl describe node minikube`. You can also start a fancy Web dashboard ! `minikube dashboard` will automatically open in your default Web browser, to get only the URL, add `--url`.
 
 Let's run a deployment using Docker image `darek/goweb:1.0` and exposes port 8080. 
 
@@ -136,7 +136,7 @@ Remember that in order to get a detailed insight into pods and deployments with 
 Let's define a service, which will group our pods, expose a port and provide discoverability. Type `NodePort` says that the port will be exposed.
 
 ```bash
-➜ kubectl expose deployment goweb --type=NodePort
+➜ kubectl expose deployment goweb --type=NodePort --port=8080
 ➜ kubectl get services
 NAME         CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
 goweb        10.0.0.191   <nodes>       8080/TCP   9s

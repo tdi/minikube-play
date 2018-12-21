@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: goweb
+spec:
+  containers:
+    - image: darek/goweb:1.0
+      name: goweb
+      ports:
+        - containerPort: 8080
+          name: http
